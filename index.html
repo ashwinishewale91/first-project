@@ -1,12 +1,468 @@
 <!DOCTYPE html>
-<html>
-<body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f5ef">
+  <title>Student Admission Application</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202a27;
+      --muted: #66716c;
+      --line: #dce2dc;
+      --paper: #ffffff;
+      --canvas: #f4f5ef;
+      --green: #176b52;
+      --green-dark: #10513e;
+      --green-soft: #e8f2ed;
+      --orange: #dc7444;
+      --focus: #edaa4e;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+    }
 
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
-<h1>TYBSC</h1>
-<h1>2026</h1>
-<h1>Sem 1</h1>
-<h1>Python</h1>
+    * { box-sizing: border-box; }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      color: var(--ink);
+      background-color: var(--canvas);
+      background-image: radial-gradient(#d8ded6 0.75px, transparent 0.75px);
+      background-size: 18px 18px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .page-shell {
+      width: min(100% - 40px, 920px);
+      margin: 48px auto;
+    }
+
+    .masthead {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 24px;
+    }
+
+    .school-mark {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border-radius: 12px;
+      color: #fff;
+      background: var(--green);
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .school-name {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .school-caption {
+      margin: 1px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .form-panel {
+      overflow: hidden;
+      border: 1px solid #e1e5de;
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 16px 44px rgb(36 55 44 / 8%);
+    }
+
+    .form-intro {
+      position: relative;
+      padding: 34px 40px 30px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(110deg, #f1f7f2, #fff 70%);
+    }
+
+    .form-intro::after {
+      position: absolute;
+      right: 40px;
+      bottom: -1px;
+      width: 88px;
+      height: 4px;
+      background: var(--orange);
+      content: "";
+    }
+
+    .eyebrow {
+      margin: 0 0 6px;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(30px, 5vw, 42px);
+      font-weight: 500;
+      line-height: 1.15;
+    }
+
+    .intro-copy {
+      max-width: 600px;
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+
+    .form-content { padding: 8px 40px 34px; }
+
+    fieldset {
+      min-width: 0;
+      margin: 0;
+      padding: 27px 0 29px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    legend {
+      width: 100%;
+      margin: 0 0 17px;
+      padding: 0;
+      font-size: 17px;
+      font-weight: 750;
+    }
+
+    .section-number {
+      display: inline-grid;
+      width: 25px;
+      height: 25px;
+      margin-right: 8px;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--green);
+      background: var(--green-soft);
+      font-size: 12px;
+      vertical-align: 1px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px 20px;
+    }
+
+    .field { min-width: 0; }
+    .field-wide { grid-column: 1 / -1; }
+
+    label, .group-label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .required { color: #b64d2d; }
+
+    input, select, textarea {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 1px solid #cbd4ce;
+      border-radius: 4px;
+      color: var(--ink);
+      background: #fff;
+      font: inherit;
+    }
+
+    input::placeholder, textarea::placeholder { color: #89938d; }
+    textarea { min-height: 88px; resize: vertical; }
+
+    input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      min-height: 44px;
+      align-items: center;
+    }
+
+    .choice {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .choice input, .consent input {
+      width: 17px;
+      min-height: 17px;
+      height: 17px;
+      margin: 0;
+      accent-color: var(--green);
+    }
+
+    .help-text {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 23px 0;
+      font-size: 13px;
+    }
+
+    .consent input { flex: 0 0 auto; margin-top: 3px; }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .required-note { margin: 0; color: var(--muted); font-size: 12px; }
+
+    .button-row { display: flex; gap: 10px; }
+
+    button {
+      min-height: 44px;
+      padding: 10px 18px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .button-secondary { border-color: var(--line); color: var(--ink); background: #fff; }
+    .button-primary { color: #fff; background: var(--green); }
+    .button-primary:hover { background: var(--green-dark); }
+
+    @media (max-width: 620px) {
+      .page-shell { width: min(100% - 24px, 920px); margin: 22px auto; }
+      .form-intro { padding: 27px 22px 24px; }
+      .form-intro::after { right: 22px; }
+      .form-content { padding: 4px 22px 26px; }
+      .field-grid { grid-template-columns: 1fr; gap: 14px; }
+      .field-wide { grid-column: auto; }
+      .actions { align-items: flex-start; flex-direction: column; }
+      .button-row { width: 100%; }
+      .button-row button { flex: 1; }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .form-panel { animation: arrive 420ms ease-out both; }
+      @keyframes arrive {
+        from { opacity: 0; transform: translateY(9px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <header class="masthead">
+      <div class="school-mark" aria-hidden="true">N</div>
+      <div>
+        <p class="school-name">Northfield Academy</p>
+        <p class="school-caption">Learn with purpose. Lead with care.</p>
+      </div>
+    </header>
+
+    <section class="form-panel" aria-labelledby="form-title">
+      <div class="form-intro">
+        <p class="eyebrow">Admissions · 2026–2027</p>
+        <h1 id="form-title">Student application</h1>
+        <p class="intro-copy">Complete each section to apply for admission. Fields marked <span class="required">*</span> are required.</p>
+      </div>
+
+      <form class="form-content" method="post" enctype="multipart/form-data">
+        <fieldset>
+          <legend><span class="section-number">01</span>Student information</legend>
+          <div class="field-grid">
+            <div class="field">
+              <label for="first-name">First name <span class="required">*</span></label>
+              <input id="first-name" name="first_name" autocomplete="given-name" required>
+            </div>
+            <div class="field">
+              <label for="last-name">Last name <span class="required">*</span></label>
+              <input id="last-name" name="last_name" autocomplete="family-name" required>
+            </div>
+            <div class="field">
+              <label for="middle-name">Middle name</label>
+              <input id="middle-name" name="middle_name" autocomplete="additional-name">
+            </div>
+            <div class="field">
+              <label for="preferred-name">Preferred name</label>
+              <input id="preferred-name" name="preferred_name">
+            </div>
+            <div class="field">
+              <label for="birth-date">Date of birth <span class="required">*</span></label>
+              <input id="birth-date" name="date_of_birth" type="date" autocomplete="bday" required>
+            </div>
+            <div class="field">
+              <span class="group-label" id="gender-label">Gender</span>
+              <div class="choice-row" role="group" aria-labelledby="gender-label">
+                <label class="choice"><input type="radio" name="gender" value="female"> Female</label>
+                <label class="choice"><input type="radio" name="gender" value="male"> Male</label>
+                <label class="choice"><input type="radio" name="gender" value="another"> Another / prefer not to say</label>
+              </div>
+            </div>
+            <div class="field">
+              <label for="citizenship">Citizenship</label>
+              <input id="citizenship" name="citizenship" autocomplete="country-name">
+            </div>
+            <div class="field">
+              <label for="student-email">Student email</label>
+              <input id="student-email" name="student_email" type="email" autocomplete="email">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend><span class="section-number">02</span>Contact and address</legend>
+          <div class="field-grid">
+            <div class="field">
+              <label for="phone">Phone number <span class="required">*</span></label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" required>
+            </div>
+            <div class="field">
+              <label for="contact-email">Contact email <span class="required">*</span></label>
+              <input id="contact-email" name="contact_email" type="email" autocomplete="email" required>
+            </div>
+            <div class="field field-wide">
+              <label for="street-address">Street address <span class="required">*</span></label>
+              <input id="street-address" name="street_address" autocomplete="street-address" required>
+            </div>
+            <div class="field">
+              <label for="city">City <span class="required">*</span></label>
+              <input id="city" name="city" autocomplete="address-level2" required>
+            </div>
+            <div class="field">
+              <label for="region">State / Province / Region</label>
+              <input id="region" name="region" autocomplete="address-level1">
+            </div>
+            <div class="field">
+              <label for="postal-code">Postal code</label>
+              <input id="postal-code" name="postal_code" autocomplete="postal-code">
+            </div>
+            <div class="field">
+              <label for="country">Country <span class="required">*</span></label>
+              <input id="country" name="country" autocomplete="country-name" required>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend><span class="section-number">03</span>Academic history</legend>
+          <div class="field-grid">
+            <div class="field">
+              <label for="school">Current or most recent school <span class="required">*</span></label>
+              <input id="school" name="current_school" required>
+            </div>
+            <div class="field">
+              <label for="grade">Current grade / year <span class="required">*</span></label>
+              <select id="grade" name="current_grade" required>
+                <option value="" selected disabled>Select grade</option>
+                <option>Grade 6</option><option>Grade 7</option><option>Grade 8</option>
+                <option>Grade 9</option><option>Grade 10</option><option>Grade 11</option>
+                <option>Grade 12</option><option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="entry-grade">Grade applying for <span class="required">*</span></label>
+              <select id="entry-grade" name="entry_grade" required>
+                <option value="" selected disabled>Select grade</option>
+                <option>Grade 6</option><option>Grade 7</option><option>Grade 8</option>
+                <option>Grade 9</option><option>Grade 10</option><option>Grade 11</option>
+                <option>Grade 12</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="entry-term">Preferred entry term <span class="required">*</span></label>
+              <select id="entry-term" name="entry_term" required>
+                <option value="" selected disabled>Select term</option>
+                <option>Fall 2026</option><option>Spring 2027</option><option>Fall 2027</option>
+              </select>
+            </div>
+            <div class="field field-wide">
+              <label for="interests">Academic interests or learning support needs</label>
+              <textarea id="interests" name="academic_interests" placeholder="Share anything that would help us support your application."></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend><span class="section-number">04</span>Parent or guardian</legend>
+          <div class="field-grid">
+            <div class="field">
+              <label for="guardian-name">Full name <span class="required">*</span></label>
+              <input id="guardian-name" name="guardian_name" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="relationship">Relationship to student <span class="required">*</span></label>
+              <select id="relationship" name="guardian_relationship" required>
+                <option value="" selected disabled>Select relationship</option>
+                <option>Parent</option><option>Legal guardian</option><option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="guardian-phone">Phone number <span class="required">*</span></label>
+              <input id="guardian-phone" name="guardian_phone" type="tel" autocomplete="tel" required>
+            </div>
+            <div class="field">
+              <label for="guardian-email">Email address <span class="required">*</span></label>
+              <input id="guardian-email" name="guardian_email" type="email" autocomplete="email" required>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend><span class="section-number">05</span>Supporting documents</legend>
+          <div class="field-grid">
+            <div class="field">
+              <label for="transcript">Transcript or latest report</label>
+              <input id="transcript" name="transcript" type="file" accept=".pdf,.jpg,.jpeg,.png">
+              <p class="help-text">PDF or image, up to 10 MB.</p>
+            </div>
+            <div class="field">
+              <label for="identity-document">Proof of identity</label>
+              <input id="identity-document" name="identity_document" type="file" accept=".pdf,.jpg,.jpeg,.png">
+              <p class="help-text">PDF or image, up to 10 MB.</p>
+            </div>
+          </div>
+        </fieldset>
+
+        <label class="consent">
+          <input type="checkbox" name="information_confirmed" required>
+          <span>I confirm that the information in this application is accurate and complete to the best of my knowledge. <span class="required">*</span></span>
+        </label>
+
+        <div class="actions">
+          <p class="required-note"><span class="required">*</span> Required fields</p>
+          <div class="button-row">
+            <button class="button-secondary" type="reset">Clear form</button>
+            <button class="button-primary" type="submit">Submit application</button>
+          </div>
+        </div>
+      </form>
+    </section>
+  </main>
 </body>
 </html>
